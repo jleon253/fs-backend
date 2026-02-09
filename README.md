@@ -13,7 +13,7 @@ Backend ligero en TypeScript (Express + Prisma) para gestionar clientes y cuenta
 ```sh
 npm install
 ```
-2. Configurar variables de entorno en [`.env`](.env).
+2. Configurar variables de entorno en `.env`.
 3. Ejecutar en desarrollo:
 ```sh
 npm run dev
