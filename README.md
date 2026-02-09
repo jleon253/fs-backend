@@ -23,6 +23,9 @@ npm run dev
 ## Scripts útiles (package.json)
 - `dev`: nodemon para desarrollo y recarga de TypeScript (`npm run dev`). Ver [`package.json`](package.json) para detalles.
 - `start`: ejecuta `dist/index.js` (producción) — requiere compilar/transpilar manualmente si aplica.
+- `prisma generate`: regenera el cliente Prisma en `src/generated/prisma`.
+- `prisma migrate dev`: ejecuta migraciones y genera cliente.
+- `prisma db seed`: ejecuta el archivo [`prisma/seed.ts`](prisma/seed.ts) para cargar datos iniciales (2 clientes y 2 cuentas de ejemplo).
 
 ## Estructura y archivos clave
 - Entrada de la app: [`src/index.ts`](src/index.ts)
@@ -38,9 +41,12 @@ npm run dev
   - [`src/controllers/accountController.type.ts`](src/controllers/accountController.type.ts)
 - Prisma:
   - Schema: [`prisma/schema.prisma`](prisma/schema.prisma)
+  - Seed: [`prisma/seed.ts`](prisma/seed.ts) — carga datos de ejemplo: 2 clientes (Juan García López y María Rodríguez Martínez) con 2 cuentas asociadas.
   - Config: [`prisma.config.ts`](prisma.config.ts)
   - Cliente generado: [`src/generated/prisma/client.ts`](src/generated/prisma/client.ts)
   - Wrapper de instancia: [`src/lib/prisma.ts`](src/lib/prisma.ts) — exporta [`prisma`](src/lib/prisma.ts)
+- Documentación y esquema:
+  - [`docs/database.sql`](docs/database.sql) — esquema SQL completo con definición de tablas, constraints, función `generate_unique_account_number()` para generar números de cuenta aleatorios de 7 dígitos, y trigger `trg_assign_account_number` para asignar automáticamente el número al crear una cuenta.
 - i18n / Mensajes en ES:
   - Fichero de mensajes: [`src/locales/es.json`](src/locales/es.json)
   - Helper: [`src/utils/i18n.ts`](src/utils/i18n.ts) — función [`t`](src/utils/i18n.ts)
@@ -91,6 +97,15 @@ npm run dev
     - Handler: [`createAccount`](src/controllers/accountController.ts)
     - Payload: `document_number` (ver [`CreateAccountBody`](src/controllers/accountController.type.ts))
     - Lógica: busca cliente por `document_number`, devuelve 404 si no existe, crea cuenta vinculada (`customer_id`).
+
+## Postman
+Para probar los endpoints, se incluyen dos archivos JSON de colecciones de Postman:
+- `get-customers.json` — colección con ejemplos de solicitudes GET para la ruta `/api/customers`
+- `get-accounts.json` — colección con ejemplos de solicitudes GET para la ruta `/api/accounts`
+- `post-customers.json` — colección con ejemplos de solicitudes POST para la ruta `/api/customers`
+- `post-accounts.json` — colección con ejemplos de solicitudes POST para la ruta `/api/accounts`
+
+Importa estos archivos en Postman para acceder rápidamente a los endpoints configurados.
 
 ## Mensajes y internacionalización
 - Mensajes en español centralizados en [`src/locales/es.json`](src/locales/es.json).
