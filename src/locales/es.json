@@ -1,0 +1,18 @@
+{
+  "errors": {
+    "bad_request": "Solicitud incorrecta",
+    "conflict": "Conflicto",
+    "not_found": "No encontrado",
+    "internal_server_error": "Error interno del servidor",
+    "customer_missing_fields": "El número de documento y el email son obligatorios.",
+    "account_missing_fields": "El número de documento es obligatorio para abrir una cuenta.",
+    "already_exists": "El número de documento o el email ya están registrados.",
+    "customer_not_found": "No se puede crear la cuenta: El cliente con documento {{id}} no existe.",
+    "customer_created_error": "Ocurrió un error al crear el cliente.",
+    "customer_updated_error": "Ocurrió un error al crear la cuenta bancaria."
+  },
+  "success": {
+    "customer_created": "Cliente registrado exitosamente.",
+    "account_created": "Cuenta bancaria creada y asociada correctamente."
+  }
+}
