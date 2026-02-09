@@ -1,0 +1,10 @@
+{
+  "message": "Cuenta bancaria creada y asociada correctamente.",
+  "data": {
+    "account_number": 8049308,
+    "created_at": "2026-02-09T12:09:44.651Z",
+    "customer_id": "72b501cb-7b3e-4312-87c9-90f22a509d79",
+    "id": "a67e1546-cc53-4b52-a36f-6b9a8ad5c61d",
+    "status": "ACTIVE"
+  }
+}

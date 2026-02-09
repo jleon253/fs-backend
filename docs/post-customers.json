@@ -1,0 +1,11 @@
+{
+  "message": "Cliente registrado exitosamente.",
+  "data": {
+    "created_at": "2026-02-09T12:09:08.786Z",
+    "document_number": "1078654333",
+    "document_type": "CC",
+    "email": "robert.doe@example.com",
+    "full_name": "Robert Doe",
+    "id": "72b501cb-7b3e-4312-87c9-90f22a509d79"
+  }
+}

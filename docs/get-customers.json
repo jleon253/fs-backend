@@ -1,0 +1,43 @@
+[
+  {
+    "created_at": "2026-02-09T00:06:01.591Z",
+    "document_number": "1076548755",
+    "document_type": "CC",
+    "email": "john.doe@example.com",
+    "full_name": "John Doe",
+    "id": "c8de23a7-fd05-457b-bfe3-5ef6b17d0d96",
+    "accounts": [
+      {
+        "account_number": 7398272,
+        "created_at": "2026-02-09T01:57:29.502Z",
+        "customer_id": "c8de23a7-fd05-457b-bfe3-5ef6b17d0d96",
+        "id": "adf36277-3ec2-4e5d-a1dc-79ea2d0c0a70",
+        "status": "ACTIVE"
+      },
+      {
+        "account_number": 3505905,
+        "created_at": "2026-02-09T03:19:35.120Z",
+        "customer_id": "c8de23a7-fd05-457b-bfe3-5ef6b17d0d96",
+        "id": "9da1c2b5-e61c-42f6-bb70-1f2c472ef746",
+        "status": "ACTIVE"
+      }
+    ]
+  },
+  {
+    "created_at": "2026-02-08T18:42:13.450Z",
+    "document_number": "1036557864",
+    "document_type": "CC",
+    "email": "diana.doe@mail.com",
+    "full_name": "Diana Doe",
+    "id": "412444a8-9c9e-49c3-87a8-7fedc138f113",
+    "accounts": [
+      {
+        "account_number": 5816845,
+        "created_at": "2026-02-08T18:46:04.954Z",
+        "customer_id": "412444a8-9c9e-49c3-87a8-7fedc138f113",
+        "id": "52c36b7a-de56-4009-9537-aafd3bf8dd30",
+        "status": "ACTIVE"
+      }
+    ]
+  }
+]
