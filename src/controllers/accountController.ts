@@ -3,7 +3,11 @@ import type { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { t } from "../utils/i18n";
 
-import { EAccountType, type CreateAccountBody, type CustomerId } from "./accountController.type";
+import {
+  EAccountType,
+  type CreateAccountBody,
+  type CustomerId,
+} from "./accountController.type";
 
 export const createAccount = async (req: Request, res: Response) => {
   const { document_number } = req.body as CreateAccountBody;
@@ -54,11 +58,12 @@ export const getAccounts = async (req: Request, res: Response) => {
     const limit = Number.parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
     const documentNumber = req.query.document_number as string;
+    const search = req.query.search as string;
 
     let whereClause = {};
 
     if (documentNumber) {
-      const customer:CustomerId | null  = await prisma.customers.findFirst({
+      const customer: CustomerId | null = await prisma.customers.findFirst({
         where: { document_number: String(documentNumber) },
         select: { id: true },
       });
@@ -70,7 +75,19 @@ export const getAccounts = async (req: Request, res: Response) => {
         });
       }
 
-      whereClause = { customer_id: customer?.id}
+      whereClause = { customer_id: customer?.id };
+    }
+
+    if (search) {
+      const accountNumberInt = Number.parseInt(String(search));
+      if (!Number.isNaN(accountNumberInt)) {
+        whereClause = {
+          ...whereClause,
+          account_number : {
+            equals: accountNumberInt,
+          }
+        };
+      }
     }
 
     const [total, data] = await prisma.$transaction([
