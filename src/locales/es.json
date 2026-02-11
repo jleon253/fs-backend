@@ -13,7 +13,9 @@
     "customers_fetch_error": "Ocurrió un error al obtener la lista de clientes.",
     "account_created_error": "Ocurrió un error al crear la cuenta bancaria.",
     "account_updated_error": "Ocurrió un error al actualizar la cuenta bancaria.",
-    "account_fetch_error": "Ocurrió un error al obtener la lista de cuentas bancarias."
+    "account_fetch_error": "Ocurrió un error al obtener la lista de cuentas bancarias.",
+    "account_update_error": "Ocurrió un error al actualizar la cuenta bancaria.",
+    "invalid_status": "Valor de estado invalido"
   },
   "success": {
     "customer_created": "Cliente registrado exitosamente.",

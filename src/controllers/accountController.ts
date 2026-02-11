@@ -83,9 +83,9 @@ export const getAccounts = async (req: Request, res: Response) => {
       if (!Number.isNaN(accountNumberInt)) {
         whereClause = {
           ...whereClause,
-          account_number : {
+          account_number: {
             equals: accountNumberInt,
-          }
+          },
         };
       }
     }
@@ -113,6 +113,33 @@ export const getAccounts = async (req: Request, res: Response) => {
     res.status(500).json({
       error: t("errors.internal_server_error"),
       message: error.message ?? t("errors.account_created_error"),
+    });
+  }
+};
+
+export const updateAccountStatus = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const allowedStatus = [EAccountType.ACTIVE, EAccountType.INACTIVE];
+  if (!allowedStatus.includes(status)) {
+    return res.status(400).json({ message: t("errors.invalid_status") });
+  }
+
+  try {
+    const updatedAccount = await prisma.accounts.update({
+      where: { id: String(id) },
+      data: { status: String(status) },
+    });
+
+    res.json({
+      success: true,
+      data: updatedAccount,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      error: t("errors.internal_server_error"),
+      message: error.message ?? t("errors.account_update_error"),
     });
   }
 };
