@@ -1,8 +1,9 @@
-import type { Request, Response } from 'express';
+import type { Request, Response } from "express";
 
-import { prisma } from '../lib/prisma';
-import type { CreateAccountBody } from './accountController.type';
-import { t } from '../utils/i18n'
+import { prisma } from "../lib/prisma";
+import { t } from "../utils/i18n";
+
+import { EAccountType, type CreateAccountBody, type CustomerId } from "./accountController.type";
 
 export const createAccount = async (req: Request, res: Response) => {
   const { document_number } = req.body as CreateAccountBody;
@@ -10,58 +11,91 @@ export const createAccount = async (req: Request, res: Response) => {
   // Required fields: status 400
   if (!document_number) {
     return res.status(400).json({
-      error: t('errors.bad_request'),
-      message: t('errors.account_missing_fields')
+      error: t("errors.bad_request"),
+      message: t("errors.account_missing_fields"),
     });
   }
 
   try {
-    // Check if customer exists by document_number
     const customerExist = await prisma.customers.findUnique({
-      where: { document_number: document_number }
+      where: { document_number: document_number },
     });
 
-    // If customer doesn't exist, return 404
     if (!customerExist) {
       return res.status(404).json({
-        error: t('errors.not_found'),
-        message: t('errors.customer_not_found', { id: document_number })
+        error: t("errors.not_found"),
+        message: t("errors.customer_not_found", { id: document_number }),
       });
     }
 
-    // Create account linked to the customer
     const newAccount = await prisma.accounts.create({
       data: {
         account_number: 0,
         customer_id: customerExist.id,
-        status: 'ACTIVE'
-      }
+        status: EAccountType.ACTIVE,
+      },
     });
 
     res.status(201).json({
-      message: t('success.account_created'),
-      data: newAccount
+      message: t("success.account_created"),
+      data: newAccount,
     });
-
   } catch (error: any) {
     res.status(500).json({
-      error: t('errors.internal_server_error'),
-      message: error.message ?? t('errors.account_created_error')
+      error: t("errors.internal_server_error"),
+      message: error.message ?? t("errors.account_created_error"),
     });
   }
 };
 
-export const getAccounts = async (req: Request, res: Response): Promise<void> => {
+export const getAccounts = async (req: Request, res: Response) => {
   try {
-    const accountsList = await prisma.accounts.findMany({
-      include: { customers: true },
-      orderBy: { created_at: 'desc' }
+    const page = Number.parseInt(req.query.page as string) || 1;
+    const limit = Number.parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    const documentNumber = req.query.document_number as string;
+
+    let whereClause = {};
+
+    if (documentNumber) {
+      const customer:CustomerId | null  = await prisma.customers.findFirst({
+        where: { document_number: String(documentNumber) },
+        select: { id: true },
+      });
+
+      if (!customer) {
+        return res.status(404).json({
+          error: t("errors.not_found"),
+          message: t("errors.customer_not_found", { id: documentNumber }),
+        });
+      }
+
+      whereClause = { customer_id: customer?.id}
+    }
+
+    const [total, data] = await prisma.$transaction([
+      prisma.accounts.count({ where: whereClause }),
+      prisma.accounts.findMany({
+        where: whereClause,
+        skip,
+        take: limit,
+        include: { customers: true },
+        orderBy: { created_at: "desc" },
+      }),
+    ]);
+
+    res.json({
+      data,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / limit),
+      },
     });
-    res.json(accountsList);
   } catch (error: any) {
     res.status(500).json({
-      error: t('errors.internal_server_error'),
-      message: error.message ?? t('errors.account_created_error')
+      error: t("errors.internal_server_error"),
+      message: error.message ?? t("errors.account_created_error"),
     });
   }
 };
