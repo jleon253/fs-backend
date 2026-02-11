@@ -7,9 +7,13 @@
     "customer_missing_fields": "El número de documento y el email son obligatorios.",
     "account_missing_fields": "El número de documento es obligatorio para abrir una cuenta.",
     "already_exists": "El número de documento o el email ya están registrados.",
-    "customer_not_found": "No se puede crear la cuenta: El cliente con documento {{id}} no existe.",
+    "customer_not_found": "El cliente con documento {{id}} no existe.",
     "customer_created_error": "Ocurrió un error al crear el cliente.",
-    "customer_updated_error": "Ocurrió un error al crear la cuenta bancaria."
+    "customer_updated_error": "Ocurrió un error al actualizar el cliente.",
+    "customers_fetch_error": "Ocurrió un error al obtener la lista de clientes.",
+    "account_created_error": "Ocurrió un error al crear la cuenta bancaria.",
+    "account_updated_error": "Ocurrió un error al actualizar la cuenta bancaria.",
+    "account_fetch_error": "Ocurrió un error al obtener la lista de cuentas bancarias."
   },
   "success": {
     "customer_created": "Cliente registrado exitosamente.",
