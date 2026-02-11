@@ -1,8 +1,10 @@
 import type { Request, Response } from 'express';
 
 import { prisma } from '../lib/prisma';
-import type { CreateCustomerBody } from './customerController.type';
+import { Prisma } from '../generated/prisma/client'
 import { t } from '../utils/i18n'
+
+import type { CreateCustomerBody } from './customerController.type';
 
 export const createCustomer = async (req: Request, res: Response) => {
   const { document_type, document_number, full_name, email } = req.body as CreateCustomerBody;
@@ -45,9 +47,42 @@ export const createCustomer = async (req: Request, res: Response) => {
 };
 
 export const getCustomers = async (req: Request, res: Response): Promise<void> => {
-  const customersList = await prisma.customers.findMany({
-    include: { accounts: true },
-    orderBy: { created_at: 'desc' }
-  });
-  res.json(customersList);
+  try {
+    const page = Number.parseInt(req.query.page as string) || 1;
+    const limit = Number.parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    const search = req.query.search as string;
+
+    const where: Prisma.customersWhereInput = search ? {
+      OR: [
+        { full_name: { contains: search, mode: 'insensitive' } },
+        { document_number: { contains: search, mode: 'insensitive' } },
+      ]
+    } : {};
+
+    const [total, data] = await prisma.$transaction([
+      prisma.customers.count({ where }),
+      prisma.customers.findMany({
+        where,
+        skip,
+        take: limit,
+        include: { accounts: true },
+        orderBy: { created_at: 'desc' }
+      })
+    ]);
+
+    res.json({
+      data,
+      meta: {
+        total,
+        page,
+        last_page: Math.ceil(total / limit)
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      error: t('errors.internal_server_error'),
+      message: error.message ?? t('errors.customers_fetch_error')
+    });
+  }
 };
