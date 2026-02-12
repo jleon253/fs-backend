@@ -49,9 +49,3 @@ Desktop.ini
 
 # Test output
 /test-output/
-
-# Prisma
-/src/generated/prisma
-
-
-/generated/prisma
