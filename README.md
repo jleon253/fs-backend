@@ -8,6 +8,11 @@ Backend ligero en TypeScript (Express + Prisma) para gestionar clientes y cuenta
 - Internacionalización simple con mensajes en español en `src/locales/es.json` y helper `t` en [`src/utils/i18n.ts`](src/utils/i18n.ts).
 - Entradas/outputs tipadas con tipos basados en el cliente Prisma.
 
+## KeyNotes
+* Explicación de proyecto en formato .pdf: [Click aqui para ver](/KeyNote/Kata-Keynote.pdf)
+* Respuestas a 4 preguntas sobre desplegar en AWS:
+![Respuestas AWS](/KeyNote/Respuestas_AWS.png)
+
 ## Quickstart
 1. Instalar dependencias:
 ```sh
